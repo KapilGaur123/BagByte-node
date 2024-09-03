@@ -1,4 +1,5 @@
 const userModel = require("../models/user-model")
+const productModel = require("../models/product-model")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require('../utils/generateToken') // -> utils/
@@ -42,11 +43,11 @@ module.exports.loginUser = async function(req, res){
     return res.redirect("/");
   } 
 
-  bcrypt.compare(password, user.password, (err, result) => {
+  bcrypt.compare(password, user.password, async (err, result) => {
     if(result){
       let token = generateToken(user) // --> utils/generateToken
       res.cookie("token",token)
-      products = [];
+      let products = await productModel.find();
       res.render('shop',{products}) // render the views/shop
     }
     else{
