@@ -4,8 +4,9 @@ const isLoggedin = require("../middlewares/isLoggedIn")
 const productModel = require("../models/product-model")
 
 router.get("/",function(req, res){
-    let error = req.flash("error");
-    res.render('index',{error})
+    let errorMsg = req.flash("error");
+
+    res.render('index',{error: errorMsg})
 })
 
 router.get("/shop", isLoggedin, async function(req, res){
