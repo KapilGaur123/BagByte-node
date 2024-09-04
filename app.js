@@ -28,6 +28,7 @@ app.use(expressSession({
 }))
 
 app.use(flash())
+app.use(express.urlencoded({ extended: true }));
 
 // require the routers
 const ownersRouter = require('./routes/ownersRouter')

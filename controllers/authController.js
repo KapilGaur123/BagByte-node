@@ -27,7 +27,10 @@ module.exports.registerUser = async function (req, res) {
   
             let token = generateToken(user) // -> utils/
             res.cookie("token",token)
-            res.send("User create successfully")
+            // res.send("User create successfully") //old method
+
+            req.flash("success","User Account create successfuly");
+            res.redirect("/");
           }
         });
       });
@@ -42,7 +45,7 @@ module.exports.loginUser = async function(req, res){
   let user = await userModel.findOne({email: email})
 
   if(!user){
-    req.flash("error","Email not axist")
+    req.flash("error","Email not exist")
     return res.redirect("/");
   } 
 
@@ -50,8 +53,15 @@ module.exports.loginUser = async function(req, res){
     if(result){
       let token = generateToken(user) // --> utils/generateToken
       res.cookie("token",token)
+
+      // we redirect the route this is not a optimal way
+      /* 
       let products = await productModel.find();
-      res.render('shop',{products}) // render the views/shop
+      let success = req.flash("success")|| []; 
+      res.render('shop',{products, success}) // render the views/shop
+      */
+
+      res.redirect("/shop")
     }
     else{
       req.flash("error","Password not match")
